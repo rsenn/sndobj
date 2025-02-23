@@ -87,7 +87,7 @@ opt.Update(env)
 opt.Save('options.cache',env)
 Help(opt.GenerateHelpText(env))
 version = env['version']
-print("SndObj Library version is " + version)
+print "SndObj Library version is " + version
  
 customCPPPATH = env['customCPPPATH']
 env.Prepend(CPPPATH = customCPPPATH)
@@ -104,19 +104,19 @@ env.Prepend(SHLINKFLAGS = customSHLINKFLAGS)
 customSWIGFLAGS = env['customSWIGFLAGS']
 env.Prepend(SWIGFLAGS = customSWIGFLAGS)
 
-print("Building the Sound Object Library")
+print "Building the Sound Object Library"
 configure = env.Configure()
 buildasio = 0
-print("scons tools in this system: ", env['TOOLS'])
+print "scons tools in this system: ", env['TOOLS']
 cffipath = ''
 pythonlibpath = []
 
-print("Checking for Realtime IO support..." )
+print "Checking for Realtime IO support..." 
 if not env['no_rtio']:
 
     if getPlatform() == 'linux':
         msvctools = False
-        print("OS is Linux...")
+        print "OS is Linux..."
         hdrs = env.Command('include/SndObj/AudioDefs.h', 'src/AudioDefs.h', "cp -f src/*.h include/SndObj")
         perms = env.Command('perms', 'src/AudioDefs.h', "chmod a-x include/SndObj/*.h")
         Depends(perms,hdrs)
@@ -128,32 +128,32 @@ if not env['no_rtio']:
             env.Append(CPPDEFINES="ALSA")
             swigdef.append('-DALSA')
             env.Append(LIBS=['asound'])
-            print("The library realtime IO (class SndRTIO) will be configured for ALSA")
+            print "The library realtime IO (class SndRTIO) will be configured for ALSA"
             rtio = True 
         elif ossFound and env['oss']:
             env.Append(CPPDEFINES="OSS")
-            print("The library realtime IO (class SndRTIO) will be configured for OSS")
+            print "The library realtime IO (class SndRTIO) will be configured for OSS"
             rtio = True
         else:
-            print("No alsa or OSS RT support")
+            print "No alsa or OSS RT support"
             rtio = False  
         if jackFound:
             env.Append(CPPDEFINES=Split('JACK'))
             env.Append(LIBS=['jack'])
             swigdef.append('-DJACK')
-            print("The library will include support for Jack (Class SndJackIO)")
+            print "The library will include support for Jack (Class SndJackIO)"
         pythonincpath = ['/usr/include/python' + getVersion(), env['pythonpath']]
         javapath =   ['/usr/lib/java/jvm/include', env['javapath']]
    
     if getPlatform() == 'win':
-        print("OS is Windows, environment is win32...")
+        print "OS is Windows, environment is win32..."
         env.Append(CPPDEFINES="WIN")
         swigdef = ['-DWIN', '-DSWIGFIX', '-D_MSBC']
         if 'msvc'in env['TOOLS']: # MSVC
             msvctools = True
             hdrs = env.Command('include/SndObj/AudioDefs.h', 'src/AudioDefs.h', "copy  src\\*.h include\\SndObj")
             separateLibs = False
-            print('using MSVC...')
+            print 'using MSVC...'
             includes = ["C:\\Program Files\\Microsoft SDKs\\Windows\\v6.0A\\Include", "C:\\pthreads\\pthreads.2", \
                         "C:\\Python%c%c\\Lib\\site-packages\\numpy\\core\\include\\" % (getVersion()[0], getVersion()[2])]
             libs = ["C:\\Program Files\\Microsoft SDKs\\Windows\\v6.0A\\Lib"]
@@ -164,7 +164,7 @@ if not env['no_rtio']:
             msvctools = False
             hdrs = env.Command('include/SndObj/AudioDefs.h', 'src/AudioDefs.h', "cp -f src/*.h include/SndObj")
             separateLibs = True
-            print('using MINGW...')
+            print 'using MINGW...'
             env.Append(CPPDEFINES=['GCC', 'USE_WIN32THREADS'])
             swigdef.append(['-DUSE_WIN32THREADS'])
             includes = ''
@@ -183,7 +183,7 @@ if not env['no_rtio']:
         javapath = ["C:\\Program Files\\Java\\jdk1.5.0_05",env['javapath']]
 
     if getPlatform() == 'cygwin':
-        print("OS is Windows, environment is Cygwin...")
+        print "OS is Windows, environment is Cygwin..."
         msvctools = False
         env.Append(CPPDEFINES=['WIN', 'GCC'])
         swigdef = ['-DWIN', '-DSWIGFIX', '-D_MBCS']
@@ -195,7 +195,7 @@ if not env['no_rtio']:
         javapath =   ['/usr/lib/java/jvm/include', env['javapath']]
 
     if getPlatform() == 'macosx':
-        print("OS is MacOSX")
+        print "OS is MacOSX"
         msvctools = False
         hdrs = env.Command('include/SndObj/AudioDefs.h', 'src/AudioDefs.h', "cp -f src/*.h include/SndObj")
         env.Append(CPPDEFINES="MACOSX")
@@ -207,13 +207,13 @@ if not env['no_rtio']:
             env.Append(CPPDEFINES=Split('JACK'))
             env.Append(LIBS=Split('jack'))
             swigdef.append('-DJACK')
-            print("The library will include support for Jack (Class SndJackIO)" )
+            print "The library will include support for Jack (Class SndJackIO)" 
         rtio = True
         pythonincpath = [env['pythonpath'], distutils.sysconfig.get_python_inc()] 
         javapath = ['/System/Library/Frameworks/JavaVM.framework', env['javapath']]  
 
     if getPlatform() == 'sgi':
-        print("OS is SGI/Irix...")
+        print "OS is SGI/Irix..."
         msvctools = False
         hdrs = env.Command('include/SndObj/AudioDefs.h', 'src/AudioDefs.h', "cp -f src/*.h include/SndObj")
         env.Append(CPPDEFINES="SGI")
@@ -225,7 +225,7 @@ if not env['no_rtio']:
         javapath =   ['/usr/lib/java/jvm/include', env['javapath']]
        
     if getPlatform() == 'unsupported':
-       print("Realtime IO not supported on this platform: %s" % sys.platform)
+       print "Realtime IO not supported on this platform: %s" % sys.platform
        env['no_rtio'] = True
 
 
@@ -251,10 +251,10 @@ else:
    
 #check endianness
 if sys.byteorder == "big":
-    print("Host is big endian")
+    print "Host is big endian"
     env.Append(CPPFLAGS="-DWORDS_BIGENDIAN")
 else:
-    print("Host is little endian")
+    print "Host is little endian"
 
 if not rtio:
    env.Prepend(CPPDEFINES=['NO_RTIO'])
@@ -262,14 +262,14 @@ if not rtio:
 
 env.Prepend(CPPPATH= ['include','include/rfftw'])
 swigcheck = 'swig' in env['TOOLS']
-print('swig %s' % (["doesn't exist", "exists..."][int(swigcheck)]))
+print 'swig %s' % (["doesn't exist", "exists..."][int(swigcheck)])
 
 pythonh = configure.CheckHeader("Python.h", language = "C")
 if not pythonh:
     for i in pythonincpath:
         pythonh = configure.CheckHeader("%s/Python.h" % i, language = "C")
         if pythonh:
-            print("Python version is " + getVersion())
+            print "Python version is " + getVersion()
             # add the numpy include path
             try:
                 import numpy
@@ -283,7 +283,7 @@ if not pythonh:
             break
 
 if not pythonh:
-    print("Python headers are missing... cannot build python module")
+    print "Python headers are missing... cannot build python module"
 
 pysndobj = env.Clone()
 jsndobj = env.Clone()
@@ -487,7 +487,7 @@ if swigcheck and env['javamodule']:
     jmod = jsndobj.SharedLibrary('java/sndobj', jwrap, SHLIBPREFIX='lib_')
   Depends(jmod,sndobjlib)
   try:
-     os.mkdir('java/JSndObj', 0o755)
+     os.mkdir('java/JSndObj', 0755)
   except:
      pass
   jcode =  jsndobj.Java(target = './java/JSndObj', source = './java')
@@ -612,12 +612,12 @@ if configure.CheckHeader("ladspa.h", language="C") and getPlatform() == 'linux' 
 
 pydest = env['instdir'] + distutils.sysconfig.get_python_lib()
 prefix = env['instdir'] + env['prefix']
-print(env['instdir'])
+print env['instdir']
 
 if msvctools:
   prefix = ''
   if env['pythonmodule']:
-    print("installing python module in %s" % pydest)
+    print "installing python module in %s" % pydest
     f = open('python/__init__.py', 'wt')
     f.write('from sndobj import *')
     f.close()
@@ -644,7 +644,7 @@ else:
          rfftwlibdest = prefix+'/lib/librfftw.a'
          env.InstallAs(rfftwlibdest, rfftwlib)
     if env['pythonmodule']:
-      print("installing python module in %s" % pydest)
+      print "installing python module in %s" % pydest
       pytems = [ 'python/sndobj.py', 'python/_sndobj.pyd']
       for i in pytems:
         env.InstallAs(os.path.join(pydest, i),i)
@@ -654,9 +654,9 @@ else:
     libdest = prefix + '/lib/libsndobj.so'
     instl = env.InstallAs(libdest + '.' + version, sndobjlib)
     linkl = env.Command(libdest,libdest + '.' + version, 'cd %s;ln -sf libsndobj.so.%s libsndobj.so' % (prefix+'/lib', version))
-    print("installing python module in %s" % pydest)
+    print "installing python module in %s" % pydest
     if env['pythonmodule']:
-     print("installing python module in %s" % pydest)
+     print "installing python module in %s" % pydest
      pytems = [ 'python/sndobj.py', '_sndobj.so']
      for i in pytems:
         env.InstallAs(os.path.join(pydest, os.path.basename(i)), i)
